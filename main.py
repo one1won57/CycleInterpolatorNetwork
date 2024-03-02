@@ -20,7 +20,7 @@ result, gpu, batch,  lr, lossLev = "save_result", 0, 1,  3e-3, 1000000000
 
 #### Input/Output Data ####
 dir_data = "home/user/"
-input_variable_name = 'pEPI_full_kspace'
+input_variable_name = 'full_kspace'
 recon_variable_name = 'kspace_recon'
 
 ## Preparing Saving Folders
