@@ -9,9 +9,10 @@ import numpy as np
 import scipy.io as sio
 import time
 import os
+import matplotlib.pyplot as plt
 
 from nnModel import network
-from Utils import real_imag, mfft2, save_rssq
+from Utils import real_imag, mfft2, mfft2_np, RSSq, RSSq_np
 
 # Parameter setting    
 acsN, acc_rate, slIdx, epochs = 8, 2, 0, 1000
@@ -247,12 +248,27 @@ for epoch in range(epochs):
 time_ALL_end = time.time()                
 print("time processed: " +str(time_ALL_end-time_ALL_start))
 
-## SAVE IMAGE
-recon_IMG_full_even_odd1_cyc = mfft2(real_imag(recon_kspace_full_even_odd1_cyc, coilN))
-rssq_recon_even_odd1_cyc = torch.squeeze(torch.sum(abs(recon_IMG_full_even_odd1_cyc)**2,1)**(0.5)).cpu().detach().numpy()
+## Plot IMAGE
+#Ground Truth
+GT_img = mfft2_np(real_imag(kspace_all[:,:,:,:],coilN))
+GT_img = RSSq_np(GT_img)
+GT_img = np.rot90(np.squeeze(GT_img/np.max(GT_img)))
+plt.imshow(GT_img, cmap = 'gray', vmin=0,vmax=1)
+plt.imsave(result + '/GT_IMG.jpg', GT_img, vmin =0,vmax = 1, cmap = 'gray')
 
-Y_batch_full_IMG_cyc =mfft2(real_imag(Y_batch_full_cyc,coilN))
-rssq_GT_cyc = torch.squeeze(torch.sum(abs(Y_batch_full_IMG_cyc)**2,1)**(0.5)).cpu().detach().numpy()
+#Distortoed IMAGE
+undersampled_kspace = np.zeros(kspace_all.shape)
+undersampled_kspace[:,:,::acc_rate,:] = kspace_all[:,:,::acc_rate,:]
+undersampled_kspace[:,:,int(n1/2-acsN/2):int(n1/2+acsN/2),:]=kspace_all[:,:,int(n1/2-acsN/2):int(n1/2+acsN/2),:]
+undersampled_img = mfft2_np(real_imag(undersampled_kspace[:,:,:,:],coilN))
+undersampled_img = RSSq_np(undersampled_img)
+undersampled_img = np.rot90(np.squeeze(undersampled_img/np.max(undersampled_img)))
+plt.imshow(undersampled_img, cmap = 'gray', vmin=0,vmax=1)
+plt.imsave(result + '/undersampled_IMG.jpg', undersampled_img, vmin =0,vmax = 1, cmap = 'gray')
 
-save_rssq(rssq_GT_cyc, name='rssq_GT',perc=100, save_img_path=result)
-save_rssq(rssq_recon_even_odd1_cyc, name='rssq_recon_cyc',perc=100, save_img_path=result)
+#Reconstructed IMAGE
+recon_IMG = mfft2(real_imag(recon_kspace_full_even_odd1_cyc, coilN))
+recon_IMG = RSSq(recon_IMG).cpu().detach().numpy()
+recon_IMG = np.rot90(np.squeeze(recon_IMG/np.max(recon_IMG)))
+plt.imshow(recon_IMG, cmap = 'gray', vmin=0,vmax=1)
+plt.imsave(result + '/recon_IMG.jpg', recon_IMG, vmin =0,vmax = 1, cmap = 'gray')
