@@ -1,5 +1,5 @@
 
-#%%
+
 import torch
 import torch.nn as nn
 from torchinfo import summary
@@ -12,14 +12,14 @@ import os
 
 from nnModel import network
 from Utils import real_imag, mfft2, save_rssq
-#%%
+
 # Parameter setting    
 acsN, acc_rate, slIdx, epochs = 8, 2, 0, 1000
-inputData = "pEPI_meas_MID15_AX_T1_se_384_1p5mm_20sl_FID30620_S1.mat"
+inputData = "[file_name.mat]"
 result, gpu, batch,  lr, lossLev = "save_result1", 0, 1,  3e-3, 1000000000
 
 #### Input/Output Data ####
-dir_data = "/mnt/data003/jwkim/pEPI_dataset_train_t1/"
+dir_data = "home/user/"
 input_variable_name = 'pEPI_full_kspace'
 recon_variable_name = 'kspace_recon'
 
@@ -27,8 +27,6 @@ recon_variable_name = 'kspace_recon'
 if not os.path.exists(result):
     os.makedirs(result)
     
-# %%
-
 
 ############################ Setting GPU  ###########################
 ## CPU thread
@@ -56,7 +54,6 @@ kspace_full = kspace_1subject[slIdx:slIdx+1:,:,:].transpose(0,1,3,2)
 print('loaded kspace      : ' + str(kspace_full.shape)) # (# of slice, no_ch*2, ky, kx)
 print('kspace dataset     : %s' % (inputData,))
 
-# %%
 # prepariing kspace data (referenced from RAKI code)
 normalize = 1/np.max(abs(kspace_full[:]))
 kspace_full = np.multiply(kspace_full,normalize)   
@@ -119,15 +116,12 @@ target_dim_Z = acc_rate - 1
 target_y_end_cyc = full_dim_Y  - np.int32((np.floor(kernel_y_1/2) + np.floor(kernel_y_2/2) + np.floor(kernel_last_y/2))) * acc_rate -1
 target_dim_Y_cyc = target_y_end_cyc- target_y_start + 1
 
-#%%
 X_test = torch.FloatTensor(kspace_all) # kspace_full_sampled
 testset = TensorDataset(X_test)
 testloader= DataLoader(testset,batch_size=batch,shuffle=False)
 test_features = next(iter(testloader))
 print(f"test_X batch shape(full): {test_features[0].size()} ")
 print('coilN, acsN: ', coilN, acsN)
-
-#%%
 
 PATH_i = []
 pEPInn_i = []
@@ -140,10 +134,7 @@ for i in range(no_ch):
 
 print('Model Summary')
 summary(pEPInn_i[0], input_size = test_features[0].size())
-#%%
 
-
-#%%
 
 '''
 # for debug
@@ -156,11 +147,10 @@ losses = []
 batch_losses = []
 '''
 
-#%%    
+ 
 for i in range(no_ch):
     pEPInn_i[i].train()
 
-#%%
 '''
 Cycle Interpolator Optimizing
 '''
@@ -266,7 +256,6 @@ for epoch in range(epochs):
             print(f"Epoch: {epoch+1:05d} Train Loss = {totLoss_i[0]}")
     losses.append(torch.mean(torch.stack(batch_losses,0),0))
                 
-#%%
 print(f"Epoch: {epoch+1:05d} Train Loss = {totLoss_i[0]}")
 
 time_ALL_end = time.time()
