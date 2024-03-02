@@ -16,7 +16,7 @@ from Utils import real_imag, mfft2, save_rssq
 # Parameter setting    
 acsN, acc_rate, slIdx, epochs = 8, 2, 0, 1000
 inputData = "[file_name.mat]"
-result, gpu, batch,  lr, lossLev = "save_result1", 0, 1,  3e-3, 1000000000
+result, gpu, batch,  lr, lossLev = "save_result", 0, 1,  3e-3, 1000000000
 
 #### Input/Output Data ####
 dir_data = "home/user/"
