@@ -10,7 +10,7 @@ To run the code.\
 
 ## Reconstructed Image
 
-**Reference
+**Reference\
 The code is referenced from the below paper.
 
 Akçakaya, M., Moeller, S., Weingärtner, S., & Uğurbil, K. (2019). Scan‐specific robust artificial‐neural‐networks for k‐space interpolation (RAKI) reconstruction: Database‐free deep learning for fast imaging. Magnetic resonance in medicine, 81(1), 439-453.
