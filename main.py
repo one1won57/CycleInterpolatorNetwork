@@ -135,18 +135,6 @@ for i in range(no_ch):
 print('Model Summary')
 summary(Net_i[0], input_size = test_features[0].size())
 
-
-'''
-# for debug
-
-epoch = 0
-data = next(iter(testloader))
-bs,i, loop = 0,0, 0
-batch_loss_c = 0
-losses = []
-batch_losses = []
-'''
-
  
 for i in range(no_ch):
     Net_i[i].train()
