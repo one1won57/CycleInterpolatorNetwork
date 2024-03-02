@@ -240,15 +240,12 @@ for epoch in range(epochs):
         batch_loss_c += totLoss_i[0]
         batch_losses.append(torch.stack(totLoss_i))
         
-        if epoch == 0:
+        if (epoch%100) == 0 or epoch == (epochs-1):
             print(f"Epoch: {epoch+1:05d} Train Loss = {totLoss_i[0]}")
     losses.append(torch.mean(torch.stack(batch_losses,0),0))
-                
-print(f"Epoch: {epoch+1:05d} Train Loss = {totLoss_i[0]}")
 
-time_ALL_end = time.time()
+time_ALL_end = time.time()                
 print("time processed: " +str(time_ALL_end-time_ALL_start))
-save_losses = torch.stack(losses,1).detach().cpu().numpy()
 
 ## SAVE IMAGE
 recon_IMG_full_even_odd1_cyc = mfft2(real_imag(recon_kspace_full_even_odd1_cyc, coilN))
