@@ -124,16 +124,16 @@ print(f"test_X batch shape(full): {test_features[0].size()} ")
 print('coilN, acsN: ', coilN, acsN)
 
 PATH_i = []
-pEPInn_i = []
+Net_i = []
 optimizer_i = []
 
 for i in range(no_ch):
-    pEPInn_i.append(network(acc_rate,no_ch).to(device))
-    optimizer_ = torch.optim.Adam(pEPInn_i[-1].parameters(), lr=lr)
+    Net_i.append(network(acc_rate,no_ch).to(device))
+    optimizer_ = torch.optim.Adam(Net_i[-1].parameters(), lr=lr)
     optimizer_i.append(optimizer_)
 
 print('Model Summary')
-summary(pEPInn_i[0], input_size = test_features[0].size())
+summary(Net_i[0], input_size = test_features[0].size())
 
 
 '''
@@ -149,7 +149,7 @@ batch_losses = []
 
  
 for i in range(no_ch):
-    pEPInn_i[i].train()
+    Net_i[i].train()
 
 '''
 Cycle Interpolator Optimizing
@@ -171,8 +171,8 @@ for epoch in range(epochs):
         X_batch_full_even_cyc[:,:,::acc_rate,:] = Y_batch_full_cyc[:,:,::acc_rate,:].to(device) # undersampled whole data
            
         
-        est_kspace_ACS_cyc_i = [pEPInn_i[j](Y_batch_ACS_cyc) for j in range(no_ch)]
-        est_kspace_full_even_odd1_cyc_i = [pEPInn_i[j](X_batch_full_even_cyc) for j in range(no_ch)]
+        est_kspace_ACS_cyc_i = [Net_i[j](Y_batch_ACS_cyc) for j in range(no_ch)]
+        est_kspace_full_even_odd1_cyc_i = [Net_i[j](X_batch_full_even_cyc) for j in range(no_ch)]
         target = torch.zeros([1,no_ch*(acc_rate-1), target_dim_Y,target_dim_X], device=device)
         
 
@@ -201,7 +201,7 @@ for epoch in range(epochs):
         recon_kspace_full_odd1_cyc = torch.clone(recon_kspace_full_even_odd1_cyc)
         recon_kspace_full_odd1_cyc[:,:,::acc_rate,:] = 0
 
-        est_kspace_full_even2_odd1_cyc_i = [pEPInn_i[j](recon_kspace_full_odd1_cyc) for j in range(no_ch)]
+        est_kspace_full_even2_odd1_cyc_i = [Net_i[j](recon_kspace_full_odd1_cyc) for j in range(no_ch)]
         target_cyc = torch.zeros([1,no_ch*(acc_rate-1), target_dim_Y_cyc,target_dim_X], device=device)
 
 
