@@ -152,6 +152,10 @@ for epoch in range(epochs):
     
     for i,data in enumerate(testloader):
         
+        '''
+        Step 1
+        '''
+        
         Y_batch_full_cyc = data[0] # full size kspace
         Y_batch_ACS_cyc = Y_batch_full_cyc[:,:,int(m1/2-acsN/2):int(m1/2+acsN/2),:] #ACS lines
         Y_batch_ACS_cyc = Y_batch_ACS_cyc.to(device)
@@ -184,7 +188,7 @@ for epoch in range(epochs):
 
 
         '''
-        cycle
+        Step 2
         '''
 
         recon_kspace_full_odd1_cyc = torch.clone(recon_kspace_full_even_odd1_cyc)
@@ -218,7 +222,7 @@ for epoch in range(epochs):
     
 
         '''
-        cyc loss
+        Loss
         '''
         mse_loss = nn.MSELoss()
 
