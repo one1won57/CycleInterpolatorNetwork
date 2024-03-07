@@ -11,7 +11,7 @@ To run the code.\
 ## Results
 ![githubImage](https://github.com/one1won57/CycleInterpolatorNetwork/assets/158134605/650f4e1f-1cef-4cb9-88ef-c4385c6585ba)
 
-**Reference**\
+## Acknowledgments
 The code is referenced from the below paper.
 
 Akçakaya, M., Moeller, S., Weingärtner, S., & Uğurbil, K. (2019). Scan‐specific robust artificial‐neural‐networks for k‐space interpolation (RAKI) reconstruction: Database‐free deep learning for fast imaging. Magnetic resonance in medicine, 81(1), 439-453.
