@@ -8,7 +8,8 @@ To run the code.\
 <code> python main.py </code>
 
 
-## Reconstructed Image
+## Results
+![githubImage](https://github.com/one1won57/CycleInterpolatorNetwork/assets/158134605/650f4e1f-1cef-4cb9-88ef-c4385c6585ba)
 
 **Reference**\
 The code is referenced from the below paper.
